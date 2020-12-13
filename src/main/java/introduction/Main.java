@@ -56,7 +56,21 @@ public class Main {
         LoopsExercises.printEvenNumbers(20);
         System.out.println("***************************");
         LoopsExercises.printFactorial(10);
-        //test
+        System.out.println("***************************");
+        LoopsExercises.fizzBuzz(100);
+        System.out.println("***************************");
+        //LoopsExercises.scannerLoopTest();
+
+
+        System.out.println();
+        System.out.println();
+        System.out.println("--------------Arrays exercise--------------");
+
+        int[] skaiciuMasyvas = {1, 5, 4, 7};
+        int[] skaiciuMasyvas2 = {1, 5, 5, 7};
+        ArraysExercises.printSumOfArrayElements(skaiciuMasyvas, skaiciuMasyvas2);
+        System.out.println("***************************");
+        ArraysExercises.printAverageOfArrays(skaiciuMasyvas);
 
     }
 }
