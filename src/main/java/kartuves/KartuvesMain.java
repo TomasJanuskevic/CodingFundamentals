@@ -14,24 +14,14 @@ public class KartuvesMain {
         while (true) {
             System.out.println("Iveskite viena raide");
             String userInput = scanner.nextLine();
-            if (userInput.length() == 1) {
-                letter = userInput.charAt(0);
+            if (userInput.length() == 1 && userInput.substring(0, 1).matches("[a-zA-Z]")) {
+                letter = userInput.toUpperCase().charAt(0);
                 break;
             } else {
-                System.out.println("Blogai ivedete");
+                System.out.println("Blogai ivedete, ivskite viena raide");
             }
         }
         return letter;
-    }
-
-    private static char[] arrayOfWords() {
-        String[] words = {"stalas", "durys", "batas"};
-        String guessWord = words[new Random().nextInt(words.length)];
-        char[] arrayOfGuessWord = new char[guessWord.length()];
-        for (int i = 0; i < guessWord.length(); i++) {
-            arrayOfGuessWord[i] = guessWord.charAt(i);
-        }
-        return arrayOfGuessWord;
     }
 
     private static char[] patternMaker(int arrayLength) {
@@ -60,8 +50,8 @@ public class KartuvesMain {
         return wordPattern;
     }
 
-    private static boolean checkWord(char[] userWord) {
-        for (char letter : userWord) {
+    private static boolean checkWord(char[] wordPattern) {
+        for (char letter : wordPattern) {
             if (letter == '*') {
                 return false;
             }
@@ -114,7 +104,7 @@ public class KartuvesMain {
     }
 
     public static void hangMan() {
-        char[] word = arrayOfWords();                                       // sukuriam atsitiktinio zodzio array
+        char[] word = Words.getRandomWord().name().toCharArray();             // sukuriam atsitiktinio zodzio array
         char[] wordPattern = patternMaker(word.length);        // sukiriam tokio pat ilgio array patterna su visais '*'
 
         for (int i = 4; i >= 0; i--) {
