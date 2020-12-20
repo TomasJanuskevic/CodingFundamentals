@@ -1,9 +1,9 @@
 package kartuves;
 
-import java.util.Random;
+import java.util.Arrays;
 import java.util.Scanner;
 
-public class KartuvesMain {
+public class HangManMain {
     public static void main(String[] args) {
         hangMan();
     }
@@ -24,14 +24,6 @@ public class KartuvesMain {
         return letter;
     }
 
-    private static char[] patternMaker(int arrayLength) {
-        char[] wordPattern = new char[arrayLength];
-        for (int i = 0; i < wordPattern.length; i++) {
-            wordPattern[i] = '*';
-        }
-        return wordPattern;
-    }
-
     private static boolean checkInput(char userInput, char[] word) {
         for (char letter : word) {
             if (userInput == letter) {
@@ -41,13 +33,12 @@ public class KartuvesMain {
         return false;
     }
 
-    private static char[] changeWordPattern(char userInput, char[] word, char[] wordPattern) {
+    private static void changeWordPattern(char userInput, char[] word, char[] wordPattern) {
         for (int i = 0; i < word.length; i++) {
             if (userInput == word[i]) {
                 wordPattern[i] = userInput;
             }
         }
-        return wordPattern;
     }
 
     private static boolean checkWord(char[] wordPattern) {
@@ -97,20 +88,26 @@ public class KartuvesMain {
                 System.out.println(" |    |");
                 System.out.println(" |    0");
                 System.out.println(" |  --|--");
-                System.out.println(" |   /|");
+                System.out.println(" |   / \\");
                 System.out.println("---");
                 break;
         }
     }
 
     public static void hangMan() {
-        char[] word = Words.getRandomWord().name().toCharArray();             // sukuriam atsitiktinio zodzio array
-        char[] wordPattern = patternMaker(word.length);        // sukiriam tokio pat ilgio array patterna su visais '*'
+        char[] word = Words.getRandomWord().toCharArray();             // sukuriam atsitiktinio zodzio array
+        char[] wordPattern = new char[word.length];        // sukiriam tokio pat ilgio array patterna su visais '*'
+        Arrays.fill(wordPattern, '*');
+
+        System.out.println("Sveiki, spekite zodi irasydami po viena raide,\nGalite suklysti 5 kartus");
+        System.out.println("Zodis turi " + wordPattern.length + " raidziu");
+        System.out.println(wordPattern);
+        System.out.println("-----------------------------------------------------");
 
         for (int i = 4; i >= 0; i--) {
             char userInput = getUserLetter();                            // nuskaitom viena raide
             if (checkInput(userInput, word)) {                              // tikrinam ar turime sutapima
-                wordPattern = changeWordPattern(userInput, word, wordPattern);  //keiciam patterna
+                changeWordPattern(userInput, word, wordPattern);  //keiciam patterna
                 if (checkWord(wordPattern)) {                                     // tikrinam ar zodzis atspetas)
                     System.out.println("Laimejote, zodis: " + String.valueOf(word));
                     return;
@@ -119,8 +116,10 @@ public class KartuvesMain {
                 i++;
             } else {
                 printHangMan(i);
+                System.out.println("Neteisingas spejimas");
                 System.out.println("Liko bandymu: " + i);
                 System.out.println(wordPattern);
+                System.out.println("==============================================");
             }
         }
         System.out.println("Zaidimas baigtas, teisingas zodis: " + String.valueOf(word));
