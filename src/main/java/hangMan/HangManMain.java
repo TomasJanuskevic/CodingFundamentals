@@ -1,11 +1,35 @@
-package kartuves;
+package hangMan;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+
 
 public class HangManMain {
     public static void main(String[] args) {
         hangMan();
+    }
+
+    private static String getRandomWordFromFile() {
+        final String FILE_LOCATION = "src/main/java/hangMan/Words.txt";
+        List<String> words = new ArrayList<>();
+        Random random = new Random();
+
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_LOCATION))) {
+            String singleFileLine = bufferedReader.readLine();
+
+            while (singleFileLine != null) {
+                words.add(singleFileLine);
+                singleFileLine = bufferedReader.readLine();
+            }
+
+        } catch (IOException exception) {
+            System.out.println("Ivyko klaida");
+        }
+        return words.get(random.nextInt(words.size()));
     }
 
     private static char getUserLetter() {
@@ -95,7 +119,8 @@ public class HangManMain {
     }
 
     public static void hangMan() {
-        char[] word = Words.getRandomWord().toCharArray();             // sukuriam atsitiktinio zodzio array
+        //char[] word = Words.getRandomWord().toCharArray();//   sukuriam atsitiktinio zodzio array is enum
+        char[] word = getRandomWordFromFile().toCharArray();        //sukuriam atsitiktinio zodzio array is failo
         char[] wordPattern = new char[word.length];        // sukiriam tokio pat ilgio array patterna su visais '*'
         Arrays.fill(wordPattern, '*');
 

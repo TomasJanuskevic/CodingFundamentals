@@ -1,4 +1,4 @@
-package kartuves;
+package hangMan;
 
 import java.util.Random;
 
