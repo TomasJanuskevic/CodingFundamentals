@@ -1,14 +1,16 @@
 package hangMan;
 
 
+import java.util.ArrayList;
 
 public class Test {
     public static void main(String[] args) {
-        int b = a();
-        System.out.println(b);
+        ArrayList<Character> letters = new ArrayList<>();
+        letters.add('a');
+        letters.add('b');
+        System.out.println(letters);
+
     }
-    public static int a (){
-        System.out.println("fghjkl");
-        return 2+2;
-    }
+
 }
+
