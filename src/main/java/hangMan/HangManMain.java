@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.*;
 
 
-
 public class HangManMain {
     public static void main(String[] args) {
         hangMan();
@@ -32,17 +31,27 @@ public class HangManMain {
         return words.get(random.nextInt(words.size()));
     }
 
-    private static char getUserLetter() {
+    private static char getUserLetterOrWord(char[] word) {
         Scanner scanner = new Scanner(System.in);
         char letter;
         while (true) {
-            System.out.println("Iveskite viena raide");
+            System.out.println("Iveskite viena raide arba spauskite '1' ir spekite visa zodi");
             String userInput = scanner.nextLine();
-            if (userInput.length() == 1 && userInput.substring(0, 1).matches("[a-zA-Z]")) {
+            String userWord;
+            if (userInput.matches("[a-zA-Z]")) {
                 letter = userInput.toUpperCase().charAt(0);
                 break;
+            } else if (userInput.matches("1")) {
+                System.out.println("Spekite visa zodi, turite tik viena bandyma");
+                userWord = scanner.nextLine();
+                String guessWord = new String(word);
+                if (userWord.equalsIgnoreCase(guessWord)) {
+                    return '1';
+                } else {
+                    return '2';
+                }
             } else {
-                System.out.println("Blogai ivedete, ivskite viena raide");
+                System.out.println("Blogai ivedete, iveskite viena raide");
             }
         }
         return letter;
@@ -124,27 +133,36 @@ public class HangManMain {
         char[] wordPattern = new char[word.length];        // sukiriam tokio pat ilgio array patterna su visais '*'
         Arrays.fill(wordPattern, '*');
 
-        System.out.println("Sveiki, spekite zodi irasydami po viena raide,\nGalite suklysti 5 kartus");
-        System.out.println("Zodis turi " + wordPattern.length + " raidziu");
+        System.out.println("Sveiki, spekite zodi irasydami po viena raide\nGalite suklysti 5 kartus\n" +
+                "Jaigu zinote visa zodi spauskite '1' ir spekite");
+        System.out.println("Zodis turi " + wordPattern.length + " raides");
         System.out.println(wordPattern);
         System.out.println("-----------------------------------------------------");
 
         for (int i = 4; i >= 0; i--) {
-            char userInput = getUserLetter();                            // nuskaitom viena raide
-            if (checkInput(userInput, word)) {                              // tikrinam ar turime sutapima
-                changeWordPattern(userInput, word, wordPattern);  //keiciam patterna
-                if (checkWord(wordPattern)) {                                     // tikrinam ar zodzis atspetas)
-                    System.out.println("Laimejote, zodis: " + String.valueOf(word));
-                    return;
-                }
-                System.out.println(wordPattern);
-                i++;
+            char userInput = getUserLetterOrWord(word);                            // nuskaitom viena raide
+            if (userInput == '1') {
+                System.out.println("Laimejote, zodis: " + String.valueOf(word));
+                return;
+            } else if (userInput == '2') {
+                printHangMan(0);
+                break;
             } else {
-                printHangMan(i);
-                System.out.println("Neteisingas spejimas");
-                System.out.println("Liko bandymu: " + i);
-                System.out.println(wordPattern);
-                System.out.println("==============================================");
+                if (checkInput(userInput, word)) {                              // tikrinam ar turime sutapima
+                    changeWordPattern(userInput, word, wordPattern);  //keiciam patterna
+                    if (checkWord(wordPattern)) {                                     // tikrinam ar zodzis atspetas)
+                        System.out.println("Laimejote, zodis: " + String.valueOf(word));
+                        return;
+                    }
+                    System.out.println(wordPattern);
+                    i++;
+                } else {
+                    printHangMan(i);
+                    System.out.println("Neteisingas spejimas");
+                    System.out.println("Liko bandymu: " + i);
+                    System.out.println(wordPattern);
+                    System.out.println("==============================================");
+                }
             }
         }
         System.out.println("Zaidimas baigtas, teisingas zodis: " + String.valueOf(word));
