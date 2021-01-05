@@ -11,8 +11,30 @@ public class HangManMain {
         hangMan();
     }
 
-    private static String getRandomWordFromFile() {
-        final String FILE_LOCATION = "src/main/java/hangMan/Words.txt";
+    private static String selectCategory() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String userInput = scanner.nextLine();
+
+            if (userInput.matches("[1-3]")) {
+                switch (userInput) {
+                    case "1":
+                        System.out.println("Pasirinkta kategorija 'Valstybes'");
+                        return "src/main/java/hangMan/Country.txt";
+                    case "2":
+                        System.out.println("Pasirinkta kategorija 'Muzika'");
+                        return "src/main/java/hangMan/Music.txt";
+                    case "3":
+                        System.out.println("Pasirinkta kategorija 'Sportas'");
+                        return "src/main/java/hangMan/Sport.txt";
+                }
+            }
+            System.out.println("Irasykite 1, 2 arba 3");
+        }
+    }
+
+    private static String getRandomWordFromFile(String FILE_LOCATION) {
+
         List<String> words = new ArrayList<>();
         Random random = new Random();
 
@@ -141,17 +163,22 @@ public class HangManMain {
     }
 
     public static void hangMan() {
-        //char[] word = Words.getRandomWord().toCharArray();//   sukuriam atsitiktinio zodzio array is enum
         ArrayList<Character> letters = new ArrayList<>();
-        char[] word = getRandomWordFromFile().toCharArray();        //sukuriam atsitiktinio zodzio array is failo
-        char[] wordPattern = new char[word.length];        // sukiriam tokio pat ilgio array patterna su visais '*'
-        Arrays.fill(wordPattern, '*');
+
+        String FILE_LOCATION;
 
         System.out.println("HANG MAN");
         printHangMan(0);
         System.out.println("Sveiki, spekite zodi irasydami po viena raide\nGalite suklysti 5 kartus\n" +
                 "Jaigu zinote visa zodi spauskite '1' ir spekite\n" +
-                "Jaigu norite suzinoti kokias raides spejote paspauskyte '2'");
+                "Jaigu norite suzinoti kokias raides spejote paspauskyte '2'\n" +
+                "Pasirinkite kategorija:\n" +
+                "1. Valstybes\n2. Muzika\n3. Sportas");
+
+        FILE_LOCATION = selectCategory();
+        char[] word = getRandomWordFromFile(FILE_LOCATION).toCharArray();        //sukuriam atsitiktinio zodzio array is failo
+        char[] wordPattern = new char[word.length];        // sukiriam tokio pat ilgio array patterna su visais '*'
+        Arrays.fill(wordPattern, '*');
         System.out.println("Zodis turi " + wordPattern.length + " raides");
         System.out.println(wordPattern);
         System.out.println("-----------------------------------------------------");
@@ -170,7 +197,7 @@ public class HangManMain {
                 i++;
             } else {
                 if (checkSameLetters(userInput, letters)) {                     // tikrinam ar jau buvo speta tokia reide
-                    letters.add(userInput);                                     // jai ne pridedam prie masyvo
+                    letters.add(userInput);                                     // jai ne, pridedam prie masyvo
                 } else {                                                        // jai taip pradedam cikla is pradziu
                     i++;
                     continue;
